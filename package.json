@@ -27,6 +27,8 @@
   },
   "homepage": "https://github.com/mbilokonsky/step-one#readme",
   "dependencies": {
+    "compute-manhattan-distance": "^1.0.1",
+    "delannoy": "^1.0.0",
     "euclidean-distance": "^1.0.0",
     "jest": "^24.5.0",
     "prettier": "^1.16.4"

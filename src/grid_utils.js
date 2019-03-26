@@ -65,22 +65,24 @@ const apply_delta = (grid, delta) => {
 	return output
 }
 
-var distance = require('euclidean-distance')
-const find_neighbors = (grid, point, range) => {
-	const self = lookup_index_for_point(grid.dimensions, point);
+var compute_euclidean_distance = require('euclidean-distance')
+var compute_manhattan_distance = require('compute-manhattan-distance')
+const NEIGHBORHOOD_TYPES = {
+	MOORE: 'MOORE',
+	VON_NEUMANN: 'VON_NEUMANN'
+}
 
-	const output = grid
-		.map((v, i) => {
-			if (self === i) { return null } // hilarious
+const moore = require('./neighbors/moore')
+const von_neumann = require('./neighbors/von_neumann')
+const find_neighbors = (point, range, type=NEIGHBORHOOD_TYPES.MOORE) => {
+	let get_neighbors;
+	if (type === NEIGHBORHOOD_TYPES.MOORE) {
+		get_neighbors = moore;
+	} else {
+		get_neighbors = von_neumann
+	}
 
-			const in_range = Math.floor(distance(point, v.coordinates)) <= range
-			if (!in_range) { return null }
-
-			return v.coordinates
-		})
-		.filter(v => !!v)
-	output.dimensions = grid.dimensions
-	return output
+	return get_neighbors(point, range)
 }
 
 module.exports = {
@@ -91,5 +93,6 @@ module.exports = {
 	clone,
 	apply_rule,
 	apply_delta,
-	find_neighbors
+	find_neighbors,
+	NEIGHBORHOOD_TYPES
 }
