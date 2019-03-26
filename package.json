@@ -1,0 +1,34 @@
+{
+  "name": "step-one",
+  "version": "1.0.0",
+  "description": "an engine for running cellular automata through n-dimensions",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "testEnvironment": "node",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbilokonsky/step-one.git"
+  },
+  "keywords": [
+    "cellular-automata",
+    "ca",
+    "cellular-automaton",
+    "calculus"
+  ],
+  "author": "@mykola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbilokonsky/step-one/issues"
+  },
+  "homepage": "https://github.com/mbilokonsky/step-one#readme",
+  "dependencies": {
+    "euclidean-distance": "^1.0.0",
+    "jest": "^24.5.0",
+    "prettier": "^1.16.4"
+  }
+}
