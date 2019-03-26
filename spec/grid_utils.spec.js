@@ -149,142 +149,18 @@ describe("grid_utils", () => {
       const neighbors_within_1 = grid_utils.find_neighbors(grid, [3, 3], 1);
       const neighbors_within_2 = grid_utils.find_neighbors(grid, [3, 3], 2);
 
-      expect(neighbors_within_1).toMatchInlineSnapshot(`
-Array [
-  Array [
-    2,
-    2,
-  ],
-  Array [
-    3,
-    2,
-  ],
-  Array [
-    4,
-    2,
-  ],
-  Array [
-    2,
-    3,
-  ],
-  Array [
-    4,
-    3,
-  ],
-  Array [
-    2,
-    4,
-  ],
-  Array [
-    3,
-    4,
-  ],
-  Array [
-    4,
-    4,
-  ],
-]
-`);
-      expect(neighbors_within_2).toMatchInlineSnapshot(`
-Array [
-  Array [
-    1,
-    1,
-  ],
-  Array [
-    2,
-    1,
-  ],
-  Array [
-    3,
-    1,
-  ],
-  Array [
-    4,
-    1,
-  ],
-  Array [
-    5,
-    1,
-  ],
-  Array [
-    1,
-    2,
-  ],
-  Array [
-    2,
-    2,
-  ],
-  Array [
-    3,
-    2,
-  ],
-  Array [
-    4,
-    2,
-  ],
-  Array [
-    5,
-    2,
-  ],
-  Array [
-    1,
-    3,
-  ],
-  Array [
-    2,
-    3,
-  ],
-  Array [
-    4,
-    3,
-  ],
-  Array [
-    5,
-    3,
-  ],
-  Array [
-    1,
-    4,
-  ],
-  Array [
-    2,
-    4,
-  ],
-  Array [
-    3,
-    4,
-  ],
-  Array [
-    4,
-    4,
-  ],
-  Array [
-    5,
-    4,
-  ],
-  Array [
-    1,
-    5,
-  ],
-  Array [
-    2,
-    5,
-  ],
-  Array [
-    3,
-    5,
-  ],
-  Array [
-    4,
-    5,
-  ],
-  Array [
-    5,
-    5,
-  ],
-]
-`);
+      expect(neighbors_within_1.length).toBe(8)
+      expect(neighbors_within_2.length).toBe(24)
+    });
+
+    it("works in 3D", () => {
+      const dimensions = [10, 10, 10];
+      const grid = createGrid(dimensions);
+      const neighbors_within_1 = grid_utils.find_neighbors(grid, [3, 3, 3], 1);
+      const neighbors_within_2 = grid_utils.find_neighbors(grid, [3, 3, 3], 2);
+
+      expect(neighbors_within_1.length).toBe(26);
+      expect(neighbors_within_2.length).toBe(92)
     });
   });
 });
