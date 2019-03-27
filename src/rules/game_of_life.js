@@ -1,5 +1,7 @@
-const grid_utils = require('../grid_utils')
-module.exports = (grid, cell) => {
-	const neighbors = grid_utils.find_neighbors(cell, range)
-
+const { moore } = require('../neighbors')
+module.exports = {
+	range: 1,
+	get_neighbors: moore,
+	survival_values: [2,3],
+	birth_values: [2]
 }

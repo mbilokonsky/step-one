@@ -130,105 +130,174 @@ describe("grid_utils", () => {
   });
 
   describe(".find_neighbors", () => {
-		describe("MOORE", () => {
-			const compute_moore_size = (dimensions, radius) => {
-				const per_side = 2 * radius + 1
-				const power = dimensions.length;
-				const total_neighborhood_size = Math.pow(per_side, power)
-				return total_neighborhood_size - 1 // remove self
-			}
+    const { moore, von_neumann } = require("../src/neighbors");
 
-			it('is the default if no neighborhood type is provided', () => {
-				const type = grid_utils.NEIGHBORHOOD_TYPES.MOORE
-				const dimensions = [10, 10];
-				const specify_moore = grid_utils.find_neighbors([3, 3], 1, type);
-				const no_specify = grid_utils.find_neighbors([3, 3], 1);
+    describe("MOORE", () => {
+      const compute_moore_size = (dimensions, radius) => {
+        const per_side = 2 * radius + 1;
+        const power = dimensions.length;
+        const total_neighborhood_size = Math.pow(per_side, power);
+        return total_neighborhood_size - 1; // remove self
+      };
 
-				expect(specify_moore).toEqual(no_specify)
-			})
+      it("is the default if no neighborhood type is provided", () => {
+        const specify_moore = grid_utils.find_neighbors([3, 3], 1, moore);
+        const no_specify = grid_utils.find_neighbors([3, 3], 1);
 
-			it("works in 1D", () => {
-				const neighbors_within_1 = grid_utils.find_neighbors([3], 1);
-				const neighbors_within_2 = grid_utils.find_neighbors([3], 2);
+        expect(specify_moore).toEqual(no_specify);
+      });
 
-				expect(JSON.stringify(neighbors_within_1)).toEqual(
-					JSON.stringify([[2], [4]])
-				);
-				expect(JSON.stringify(neighbors_within_2)).toEqual(
-					JSON.stringify([[1], [2], [4], [5]])
-				);
-			});
+      it("works in 1D", () => {
+        const neighbors_within_1 = grid_utils.find_neighbors([3], 1);
+        const neighbors_within_2 = grid_utils.find_neighbors([3], 2);
 
-			it("works in 2D", () => {
-				const dimensions = [10, 10];
-				const neighbors_within_1 = grid_utils.find_neighbors([3, 3], 1);
-					const expected_1 = compute_moore_size(dimensions, 1)
-				const neighbors_within_2 = grid_utils.find_neighbors([3, 3], 2);
-					const expected_2 = compute_moore_size(dimensions, 2)
-				const neighbors_within_3 = grid_utils.find_neighbors([3, 3], 3);
-					const expected_3 = compute_moore_size(dimensions, 3)
+        expect(neighbors_within_1).toMatchInlineSnapshot(`
+Array [
+  Array [
+    2,
+  ],
+  Array [
+    4,
+  ],
+]
+`);
+        expect(neighbors_within_2).toMatchInlineSnapshot(`
+Array [
+  Array [
+    1,
+  ],
+  Array [
+    2,
+  ],
+  Array [
+    4,
+  ],
+  Array [
+    5,
+  ],
+]
+`);
+      });
 
-				expect(neighbors_within_1.length).toBe(expected_1)
-				expect(neighbors_within_2.length).toBe(expected_2)
-				expect(neighbors_within_3.length).toBe(expected_3)
-			});
+      it("works in 2D", () => {
+        const dimensions = [10, 10];
+        const neighbors_within_1 = grid_utils.find_neighbors([3, 3], 1);
+        const expected_1 = compute_moore_size(dimensions, 1);
+        const neighbors_within_2 = grid_utils.find_neighbors([3, 3], 2);
+        const expected_2 = compute_moore_size(dimensions, 2);
+        const neighbors_within_3 = grid_utils.find_neighbors([3, 3], 3);
+        const expected_3 = compute_moore_size(dimensions, 3);
 
-			it("works in 3D", () => {
-				const dimensions = [10, 10, 10];
+        expect(neighbors_within_1.length).toBe(expected_1);
+        expect(neighbors_within_2.length).toBe(expected_2);
+        expect(neighbors_within_3.length).toBe(expected_3);
+      });
 
-				const neighbors_within_1 = grid_utils.find_neighbors([3, 3, 3], 1);
-				const expected_1 = compute_moore_size(dimensions, 1)
-				const neighbors_within_2 = grid_utils.find_neighbors([3, 3, 3], 2);
-				const expected_2 = compute_moore_size(dimensions, 2)
-				const neighbors_within_3 = grid_utils.find_neighbors([3, 3, 3], 3);
-				const expected_3 = compute_moore_size(dimensions, 3)
+      it("works in 3D", () => {
+        const dimensions = [10, 10, 10];
 
-				expect(neighbors_within_1.length).toBe(expected_1);
-				expect(neighbors_within_2.length).toBe(expected_2);
-				expect(neighbors_within_3.length).toBe(expected_3);
-			});
-		})
+        const neighbors_within_1 = grid_utils.find_neighbors([3, 3, 3], 1);
+        const expected_1 = compute_moore_size(dimensions, 1);
+        const neighbors_within_2 = grid_utils.find_neighbors([3, 3, 3], 2);
+        const expected_2 = compute_moore_size(dimensions, 2);
+        const neighbors_within_3 = grid_utils.find_neighbors([3, 3, 3], 3);
+        const expected_3 = compute_moore_size(dimensions, 3);
 
-		describe("VON_NEUMANN", () => {
-			const type = grid_utils.NEIGHBORHOOD_TYPES.VON_NEUMANN
+        expect(neighbors_within_1.length).toBe(expected_1);
+        expect(neighbors_within_2.length).toBe(expected_2);
+        expect(neighbors_within_3.length).toBe(expected_3);
+      });
+    });
 
-			it("works in 1D - same output as Moore", () => {
-				const neighbors_within_1 = grid_utils.find_neighbors([3], 1, type);
-				const neighbors_within_2 = grid_utils.find_neighbors([3], 2, type);
+    describe("VON_NEUMANN", () => {
+      it("works in 1D - same output as Moore", () => {
+        const neighbors_within_1 = grid_utils.find_neighbors(
+          [3],
+          1,
+          von_neumann
+        );
+        const neighbors_within_2 = grid_utils.find_neighbors(
+          [3],
+          2,
+          von_neumann
+        );
 
-				expect(JSON.stringify(neighbors_within_1)).toEqual(
-					JSON.stringify([[2], [4]])
-				);
-				expect(JSON.stringify(neighbors_within_2)).toEqual(
-					JSON.stringify([[1], [2], [4], [5]])
-				);
-			});
+        expect(neighbors_within_1).toMatchInlineSnapshot(`
+Array [
+  Array [
+    2,
+  ],
+  Array [
+    4,
+  ],
+]
+`);
+        expect(neighbors_within_2).toMatchInlineSnapshot(`
+Array [
+  Array [
+    1,
+  ],
+  Array [
+    2,
+  ],
+  Array [
+    4,
+  ],
+  Array [
+    5,
+  ],
+]
+`);
+      });
 
-			it("works in 2D", () => {
-				const dimensions = [10, 10];
-				const neighbors_within_1 = grid_utils.find_neighbors([3, 3], 1, type);
-				const neighbors_within_2 = grid_utils.find_neighbors([3, 3], 2, type);
-				const neighbors_within_3 = grid_utils.find_neighbors([3, 3], 3, type);
+      it("works in 2D", () => {
+        const neighbors_within_1 = grid_utils.find_neighbors(
+          [3, 3],
+          1,
+          von_neumann
+        );
+        const neighbors_within_2 = grid_utils.find_neighbors(
+          [3, 3],
+          2,
+          von_neumann
+        );
+        const neighbors_within_3 = grid_utils.find_neighbors(
+          [3, 3],
+          3,
+          von_neumann
+        );
 
-				expect(neighbors_within_1.length).toBe(4)
-				expect(neighbors_within_2.length).toBe(12)
-				expect(neighbors_within_3.length).toBe(24)
-			});
+        expect(neighbors_within_1.length).toBe(4);
+        expect(neighbors_within_2.length).toBe(12);
+        expect(neighbors_within_3.length).toBe(24);
+      });
 
-			const delannoy = require('delannoy')
-			it("works in 3D", () => {
-				const dimensions = [10, 10, 10];
-				const neighbors_within_1 = grid_utils.find_neighbors([3, 3, 3], 1, type);
-					const expected_size_1 = delannoy(dimensions.length, 1) - 1
-				const neighbors_within_2 = grid_utils.find_neighbors([3, 3, 3], 2, type);
-					const expected_size_2 = delannoy(dimensions.length, 2) - 1
-				const neighbors_within_3 = grid_utils.find_neighbors([3, 3, 3], 3, type);
-					const expected_size_3 = delannoy(dimensions.length, 3) - 1
+      const delannoy = require("delannoy");
+      it("works in 3D", () => {
+        const dimensions = [10, 10, 10];
+        const neighbors_within_1 = grid_utils.find_neighbors(
+          [3, 3, 3],
+          1,
+          von_neumann
+        );
+        const expected_size_1 = delannoy(dimensions.length, 1) - 1;
+        const neighbors_within_2 = grid_utils.find_neighbors(
+          [3, 3, 3],
+          2,
+          von_neumann
+        );
+        const expected_size_2 = delannoy(dimensions.length, 2) - 1;
+        const neighbors_within_3 = grid_utils.find_neighbors(
+          [3, 3, 3],
+          3,
+          von_neumann
+        );
+        const expected_size_3 = delannoy(dimensions.length, 3) - 1;
 
-				expect(neighbors_within_1.length).toBe(expected_size_1)
-				expect(neighbors_within_2.length).toBe(expected_size_2)
-				expect(neighbors_within_3.length).toBe(expected_size_3)
-			});
-		})
+        expect(neighbors_within_1.length).toBe(expected_size_1);
+        expect(neighbors_within_2.length).toBe(expected_size_2);
+        expect(neighbors_within_3.length).toBe(expected_size_3);
+      });
+    });
   });
 });

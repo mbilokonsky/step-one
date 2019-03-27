@@ -2,7 +2,7 @@ module.exports = function moore(point=[0,0], range = 1) {
 	const dimensions = point.length;
 	var size = range * 2 + 1
   var length = Math.pow(size, dimensions) - 1
-  var neighbors = new Array(length)
+	var neighbors = new Array(length)
 
   for (var i = 0; i < length; i++) {
     var neighbor = neighbors[i] = new Array(dimensions)

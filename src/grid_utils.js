@@ -53,8 +53,10 @@ const clone = grid => {
 	return new_grid
 }
 
+const rules = require('./rules')
 const apply_rule = (grid, rule) => {
-	const output = grid.map(rule)
+	const bound_rule = rules.apply_rule.bind(null, rule, getPoint.bind(null, grid))
+	const output = grid.map(bound_rule)
 	output.dimensions = grid.dimensions
 	return output;
 }
@@ -65,24 +67,21 @@ const apply_delta = (grid, delta) => {
 	return output
 }
 
-var compute_euclidean_distance = require('euclidean-distance')
-var compute_manhattan_distance = require('compute-manhattan-distance')
-const NEIGHBORHOOD_TYPES = {
-	MOORE: 'MOORE',
-	VON_NEUMANN: 'VON_NEUMANN'
+const { moore } = require('./neighbors')
+const find_neighbors = (point, range, get_neighbors = moore) => {
+	return get_neighbors(point, range)
 }
 
-const moore = require('./neighbors/moore')
-const von_neumann = require('./neighbors/von_neumann')
-const find_neighbors = (point, range, type=NEIGHBORHOOD_TYPES.MOORE) => {
-	let get_neighbors;
-	if (type === NEIGHBORHOOD_TYPES.MOORE) {
-		get_neighbors = moore;
-	} else {
-		get_neighbors = von_neumann
-	}
+const print_grid_1d = grid => grid.map(c => c.value ? 'X' : '.').join('')
 
-	return get_neighbors(point, range)
+const print_grid_2d = grid => {
+	const [width] = grid.dimensions
+	return grid
+		.map((c, i) => {
+			return (i%width===0 ? '\n' : '') + (c.value ? 'X' : '.')
+		})
+		.join('')
+
 }
 
 module.exports = {
@@ -94,5 +93,5 @@ module.exports = {
 	apply_rule,
 	apply_delta,
 	find_neighbors,
-	NEIGHBORHOOD_TYPES
+	print_grid_2d
 }
