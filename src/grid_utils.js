@@ -78,7 +78,7 @@ const print_grid_2d = grid => {
 	const [width] = grid.dimensions
 	return grid
 		.map((c, i) => {
-			return (i%width===0 ? '\n' : '') + (c.value ? 'X' : '.')
+			return (i%width===0 && i!==0 ? '\n' : '') + (c.value ? 'X' : '.')
 		})
 		.join('')
 
