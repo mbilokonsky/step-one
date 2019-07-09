@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.overlay {
+				width: 2047px;
+				height: 1325px;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			.on {
+				fill:chartreuse;
+				fill-opacity: .8
+			}
+
+			img {
+				width: 2047px;
+				height: 1325px;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<img src="./report.png" />
+		<svg class="overlay">
+
+		</svg>
+		<script>
+			const click_handler = index => document.getElementById("rect"+index).classList.toggle('on')
+			const log_active_cells = () => $$('.on').map(el => el.getAttribute('data-point')).map(str => str.split(',').map(s => parseInt(s)))
+			const svg = document.querySelector('.overlay')
+			const row_data = new Array(30*15)
+				.fill(0)
+				.map((element, index) => {
+					let padding = 1
+					let width = 68.2
+					let height = 88
+					let x = (index % 30) * width
+					let y = Math.floor(index / 30) * height
+					let fill = null
+					return `<rect
+						data-point="${index%30},${Math.floor(index/30)}"
+						id="rect${index}"
+						x="${x + padding}"
+						y="${y + padding}"
+						width="${width - padding}"
+						height="${height - padding}"
+						fill-opacity="0"
+						onclick="click_handler(${index})" />`
+				})
+				.join('')
+
+			svg.innerHTML = row_data
+
+		</script>
+	</body>
+</html>
