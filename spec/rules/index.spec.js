@@ -13,7 +13,6 @@ describe("rules", () => {
       input.forEach(point => (grid_utils.getPoint(grid, point).value = true));
 
       const state1 = grid_utils.print_grid_2d(grid);
-      console.log(state1);
 
       const to_cell = grid_utils.getPoint.bind(null, grid);
 
@@ -22,7 +21,6 @@ describe("rules", () => {
       new_grid.dimensions = grid.dimensions;
 
       const state2 = grid_utils.print_grid_2d(new_grid);
-      console.log(state2);
       expect(state1).toMatchInlineSnapshot(`
 "..........
 ..........
